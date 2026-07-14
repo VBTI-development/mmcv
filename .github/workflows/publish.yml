@@ -234,7 +234,7 @@ jobs:
           - jetpack: '61'
             name: Jetson JetPack 6.1 wheels
             pytorch: '2.11.0'
-            builder_image: ghcr.io/4o3f/onedl-mmcv-builders/jetpack61-torch2110@sha256:7124d0de8a4d773fab375026fb613a8179d9d5a52c3f6289617f5a5915edafdc
+            builder_image: ghcr.io/vbti-development/onedl-mmcv-builders/jetpack61-torch2110@sha256:53a9a743f2582561d413f6d67e2c64be07455e5a75ecaa157ac537acfe72a8c5
     steps:
       - uses: actions/checkout@v5
         with:
