@@ -15,7 +15,7 @@
       "smoke_script": "docker/build/manylinux-cpu/smoke_test.sh",
       "base_image": "quay.io/pypa/manylinux_2_28_x86_64",
       "auditwheel_plat": "manylinux_2_28_x86_64",
-      "image": "ghcr.io/4o3f/onedl-mmcv-builders/ml228-cpu"
+      "image": "ghcr.io/vbti-development/onedl-mmcv-builders/ml228-cpu"
     },
     "ml2014-cu118": {
       "kind": "manylinux-cuda",
