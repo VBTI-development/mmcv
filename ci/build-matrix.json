@@ -51,7 +51,7 @@
       "auditwheel_plat": "manylinux_2_34_x86_64",
       "cuda_pkg_version": "12-8",
       "gcc_toolset": "",
-      "image": "ghcr.io/4o3f/onedl-mmcv-builders/ml234-cu128"
+      "image": "ghcr.io/vbti-development/onedl-mmcv-builders/ml234-cu128"
     },
     "ml234-cu130": {
       "kind": "manylinux-cuda",
