@@ -74,7 +74,7 @@
       "base_image": "nvcr.io/nvidia/l4t-jetpack:r36.4.0",
       "jetpack": "61",
       "pytorch": "2.11.0",
-      "image": "ghcr.io/4o3f/onedl-mmcv-builders/jetpack61-torch2110"
+      "image": "ghcr.io/vbti-development/onedl-mmcv-builders/jetpack61-torch2110"
     }
   },
   "cuda_targets": {
