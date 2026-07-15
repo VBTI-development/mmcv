@@ -95,7 +95,7 @@
       "torch_backend": "cu126",
       "platform": "manylinux_x86_64",
       "builder_image": "ml234-cu126-gcc13",
-      "manylinux_image": "ghcr.io/4o3f/onedl-mmcv-builders/ml234-cu126-gcc13@sha256:8820cbaab5cccc0ac748590a8de1d05db536f2a35e54c23f70518ac19dda9d3b",
+      "manylinux_image": "ghcr.io/vbti-development/onedl-mmcv-builders/ml234-cu126-gcc13@sha256:8543d1bc2cda2267efcd52a987e73ef084cedcd3408cb5c986643c983ffe0c4f",
       "gcc_toolset": "13",
       "torch_cuda_arch_list": "7.5 8.6 8.9 9.0",
       "publish_prefix_template": "cu126-torch{torch_compact}/onedl-mmcv/",
