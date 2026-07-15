@@ -135,7 +135,7 @@
       "torch_backend": "cpu",
       "platform": "manylinux_x86_64",
       "builder_image": "ml228-cpu",
-      "manylinux_image": "ghcr.io/4o3f/onedl-mmcv-builders/ml228-cpu@sha256:4e5dcab5308a4bbdb3bdd358853c8cd95be6e2c1f47d3071ee863e0061128f48",
+      "manylinux_image": "ghcr.io/vbti-development/onedl-mmcv-builders/ml228-cpu@sha256:74d688a5d3d6108e4356ff998c65bca271d0ce3b07ea8ae5c27bb02cd3003722",
       "torch_cuda_arch_list": "",
       "publish_prefix_template": "cpu-torch{torch_compact}/onedl-mmcv/",
       "torch": {
