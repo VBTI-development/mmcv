@@ -63,7 +63,7 @@
       "auditwheel_plat": "manylinux_2_34_x86_64",
       "cuda_pkg_version": "13-0",
       "gcc_toolset": "",
-      "image": "ghcr.io/4o3f/onedl-mmcv-builders/ml234-cu130"
+      "image": "ghcr.io/vbti-development/onedl-mmcv-builders/ml234-cu130"
     },
     "jetpack61-torch2110": {
       "kind": "jetpack",
