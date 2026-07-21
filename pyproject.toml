@@ -123,7 +123,7 @@ quiet-level = 3
 ignore-words-list = "inout,hist,ba,ro,inh"
 
 [tool.uv]
-no-build-isolation-package = ["torch"]
+no-build-isolation-package = ["torch", "onedl-mmcv"]
 
 [[tool.uv.index]]
 name = "testpypi"
