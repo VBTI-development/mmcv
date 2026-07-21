@@ -17,7 +17,7 @@ def read_project_version(pyproject: Path) -> str:
         return data['project']['version']
     except KeyError as exc:
         raise SystemExit(
-            f"{pyproject} does not define project.version") from exc
+            f'{pyproject} does not define project.version') from exc
 
 
 def normalize_tag(tag: str) -> str:
@@ -31,8 +31,8 @@ def write_github_output(version: str, tag: str) -> None:
     if not output:
         raise SystemExit('GITHUB_OUTPUT is not set')
     with open(output, 'a', encoding='utf-8') as handle:
-        handle.write(f"version={version}\n")
-        handle.write(f"tag={tag}\n")
+        handle.write(f'version={version}\n')
+        handle.write(f'tag={tag}\n')
 
 
 def main() -> int:
@@ -56,12 +56,12 @@ def main() -> int:
 
     raw_tag = args.tag.removeprefix('refs/tags/')
     if not SAFE_TAG_RE.fullmatch(raw_tag):
-        raise SystemExit(f"unsafe or invalid release tag: {args.tag!r}")
+        raise SystemExit(f'unsafe or invalid release tag: {args.tag!r}')
 
     actual = normalize_tag(args.tag)
     if actual != expected:
         raise SystemExit(
-            f"Release tag {args.tag!r} does not match project.version {expected!r}"  # noqa: E501
+            f'Release tag {args.tag!r} does not match project.version {expected!r}'  # noqa: E501
         )
 
     print(expected)

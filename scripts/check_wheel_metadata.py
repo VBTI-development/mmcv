@@ -24,7 +24,7 @@ def normalize_name(name: str) -> str:
 def parse_wheel_name(path: Path) -> dict[str, str]:
     match = WHEEL_RE.match(path.name)
     if not match:
-        raise SystemExit(f"Invalid wheel filename: {path.name}")
+        raise SystemExit(f'Invalid wheel filename: {path.name}')
     return match.groupdict()
 
 
@@ -51,7 +51,7 @@ def read_metadata(path: Path) -> dict[str, str]:
         ]
         if len(metadata_names) != 1:
             raise SystemExit(
-                f"{path.name}: expected one METADATA file, found {len(metadata_names)}"  # noqa: E501
+                f'{path.name}: expected one METADATA file, found {len(metadata_names)}'  # noqa: E501
             )
         message = Parser().parsestr(
             wheel.read(metadata_names[0]).decode('utf-8', errors='replace'))
@@ -79,7 +79,7 @@ def run_auditwheel_show(path: Path) -> None:
     )
     print(result.stdout)
     if result.returncode != 0:
-        raise SystemExit(f"auditwheel show failed for {path.name}")
+        raise SystemExit(f'auditwheel show failed for {path.name}')
 
 
 def validate_wheel(
@@ -112,7 +112,7 @@ def validate_wheel(
         raise SystemExit(
             f"{path.name}: {identifier!r} is not configured for {group['id']}")
     if require_ext and not has_native_ext(path):
-        raise SystemExit(f"{path.name}: missing mmcv._ext native extension")
+        raise SystemExit(f'{path.name}: missing mmcv._ext native extension')
     if auditwheel:
         run_auditwheel_show(path)
 
@@ -142,7 +142,7 @@ def main() -> int:
     group = resolve_group(load_matrix(args.matrix), args.group_id)
     wheels = sorted(args.wheel_dir.glob('*.whl'))
     if not wheels:
-        raise SystemExit(f"No wheels found in {args.wheel_dir}")
+        raise SystemExit(f'No wheels found in {args.wheel_dir}')
 
     records = [
         validate_wheel(

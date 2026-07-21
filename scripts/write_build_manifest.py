@@ -28,7 +28,7 @@ def sha256(path: Path) -> str:
 def parse_wheel_name(path: Path) -> dict[str, str]:
     match = WHEEL_RE.match(path.name)
     if not match:
-        raise SystemExit(f"Invalid wheel filename: {path.name}")
+        raise SystemExit(f'Invalid wheel filename: {path.name}')
     return match.groupdict()
 
 
@@ -67,7 +67,7 @@ def wheel_record(path: Path, group: dict) -> dict[str, object]:
         spec = group['torch_by_build'][identifier]
     except KeyError as exc:
         raise SystemExit(
-            f"{path.name}: no torch mapping for build identifier {identifier}"
+            f'{path.name}: no torch mapping for build identifier {identifier}'
         ) from exc
     return {
         'file': str(path),
@@ -98,7 +98,7 @@ def main() -> int:
     group = resolve_group(load_matrix(args.matrix), args.group_id)
     wheels = sorted(args.wheel_dir.glob('*.whl'))
     if not wheels:
-        raise SystemExit(f"No wheels found in {args.wheel_dir}")
+        raise SystemExit(f'No wheels found in {args.wheel_dir}')
 
     manifest = {
         'version': args.version,

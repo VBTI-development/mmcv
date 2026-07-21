@@ -22,9 +22,9 @@ def load_matrix(path: Path) -> dict:
 def compact_torch(version: str) -> str:
     parts = version.split('.')
     if len(parts) < 2:
-        raise SystemExit(f"Invalid torch version: {version}")
+        raise SystemExit(f'Invalid torch version: {version}')
     patch = parts[2] if len(parts) > 2 else '0'
-    return f"{parts[0]}{parts[1]}{patch}"
+    return f'{parts[0]}{parts[1]}{patch}'
 
 
 def _targets(matrix: dict) -> dict:
@@ -58,18 +58,18 @@ def resolve_group(matrix: dict, group_id: str) -> dict:
     else:
         match = GROUP_ID_RE.match(group_id)
         if match is None:
-            raise SystemExit(f"Unknown build group: {group_id}")
+            raise SystemExit(f'Unknown build group: {group_id}')
         node = targets.get(match.group('prefix'))
         if node is None:
-            raise SystemExit(f"Unknown build group: {group_id}")
+            raise SystemExit(f'Unknown build group: {group_id}')
         matches = [
             v for v in node['torch']
             if compact_torch(v) == match.group('compact')
         ]
         if not matches:
-            raise SystemExit(f"Unknown build group: {group_id}")
+            raise SystemExit(f'Unknown build group: {group_id}')
         if len(matches) > 1:
-            raise SystemExit(f"Ambiguous build group: {group_id}")
+            raise SystemExit(f'Ambiguous build group: {group_id}')
         torch = matches[0]
     return {
         'id': group_id,
@@ -131,17 +131,17 @@ def _validate_common_builder_spec(key: str, spec: dict) -> None:
             'image',
     ):
         if not spec.get(field):
-            raise SystemExit(f"{key}: {field} is required")
+            raise SystemExit(f'{key}: {field} is required')
 
     kind = spec['kind']
     if kind not in BUILDER_KINDS:
-        raise SystemExit(f"{key}: unknown builder image kind {kind!r}")
+        raise SystemExit(f'{key}: unknown builder image kind {kind!r}')
 
     image = spec['image']
     if not image.startswith('ghcr.io/'):
-        raise SystemExit(f"{key}: image must be a GHCR image path")
+        raise SystemExit(f'{key}: image must be a GHCR image path')
     if image != image.lower():
-        raise SystemExit(f"{key}: image must be lowercase for Docker")
+        raise SystemExit(f'{key}: image must be lowercase for Docker')
 
 
 def _validate_digest_pinned_manylinux_image(prefix: str, spec: dict,
@@ -149,42 +149,42 @@ def _validate_digest_pinned_manylinux_image(prefix: str, spec: dict,
     match = DIGEST_PINNED_GHCR_IMAGE_RE.fullmatch(actual_image)
     if match is None:
         raise SystemExit(
-            f"{prefix}: manylinux_image must be a digest-pinned GHCR image, "
-            f"got {actual_image!r}")
+            f'{prefix}: manylinux_image must be a digest-pinned GHCR image, '
+            f'got {actual_image!r}')
 
     expected_repository = spec['image']
     actual_repository = match.group('repository')
     if actual_repository != expected_repository:
         raise SystemExit(
-            f"{prefix}: manylinux_image repository {actual_repository!r} != "
-            f"expected {expected_repository!r}")
+            f'{prefix}: manylinux_image repository {actual_repository!r} != '
+            f'expected {expected_repository!r}')
 
 
 def _validate_manylinux_cpu_builder_spec(key: str, spec: dict) -> None:
     if not spec.get('auditwheel_plat'):
-        raise SystemExit(f"{key}: auditwheel_plat is required")
+        raise SystemExit(f'{key}: auditwheel_plat is required')
 
     base_image = spec['base_image']
     if not base_image.startswith('quay.io/pypa/'):
-        raise SystemExit(f"{key}: base_image must be a PyPA manylinux image")
+        raise SystemExit(f'{key}: base_image must be a PyPA manylinux image')
     if 'manylinux_2_28' not in spec['dockerfile']:
         raise SystemExit(
-            f"{key}: CPU builder must use a manylinux_2_28 Dockerfile")
+            f'{key}: CPU builder must use a manylinux_2_28 Dockerfile')
     if 'manylinux_2_28' not in base_image:
-        raise SystemExit(f"{key}: CPU builder must use a manylinux_2_28 base")
+        raise SystemExit(f'{key}: CPU builder must use a manylinux_2_28 base')
     if spec['auditwheel_plat'] != 'manylinux_2_28_x86_64':
         raise SystemExit(
-            f"{key}: auditwheel_plat must be manylinux_2_28_x86_64")
+            f'{key}: auditwheel_plat must be manylinux_2_28_x86_64')
 
 
 def _validate_manylinux_builder_spec(key: str, spec: dict) -> None:
     for field in ('auditwheel_plat', 'cuda_pkg_version'):
         if not spec.get(field):
-            raise SystemExit(f"{key}: {field} is required")
+            raise SystemExit(f'{key}: {field} is required')
 
     base_image = spec['base_image']
     if not base_image.startswith('quay.io/pypa/'):
-        raise SystemExit(f"{key}: base_image must be a PyPA manylinux image")
+        raise SystemExit(f'{key}: base_image must be a PyPA manylinux image')
 
     cuda_pkg = spec['cuda_pkg_version']
     if not CUDA_PKG_RE.fullmatch(cuda_pkg):
@@ -195,39 +195,39 @@ def _validate_manylinux_builder_spec(key: str, spec: dict) -> None:
     if 'manylinux2014' in dockerfile:
         if 'manylinux2014' not in base_image:
             raise SystemExit(
-                f"{key}: manylinux2014 Dockerfile must use manylinux2014 base"  # noqa: E501
+                f'{key}: manylinux2014 Dockerfile must use manylinux2014 base'  # noqa: E501
             )
         if auditwheel_plat != 'manylinux2014_x86_64':
             raise SystemExit(
-                f"{key}: auditwheel_plat must be manylinux2014_x86_64"  # noqa: E501
+                f'{key}: auditwheel_plat must be manylinux2014_x86_64'  # noqa: E501
             )
     elif 'manylinux_2_34' in dockerfile:
         if 'manylinux_2_34' not in base_image:
             raise SystemExit(
-                f"{key}: manylinux_2_34 Dockerfile must use manylinux_2_34 base"  # noqa: E501
+                f'{key}: manylinux_2_34 Dockerfile must use manylinux_2_34 base'  # noqa: E501
             )
         if auditwheel_plat != 'manylinux_2_34_x86_64':
             raise SystemExit(
-                f"{key}: auditwheel_plat must be manylinux_2_34_x86_64"  # noqa: E501
+                f'{key}: auditwheel_plat must be manylinux_2_34_x86_64'  # noqa: E501
             )
     else:
-        raise SystemExit(f"{key}: unknown manylinux Dockerfile family")
+        raise SystemExit(f'{key}: unknown manylinux Dockerfile family')
 
 
 def _validate_jetpack_builder_spec(key: str, spec: dict) -> None:
     for field in ('jetpack', 'pytorch'):
         if not spec.get(field):
-            raise SystemExit(f"{key}: {field} is required")
+            raise SystemExit(f'{key}: {field} is required')
     if spec['runner'] != 'ubuntu-24.04-arm':
-        raise SystemExit(f"{key}: JetPack builders must use arm runners")
+        raise SystemExit(f'{key}: JetPack builders must use arm runners')
     if spec['platforms'] != 'linux/arm64':
-        raise SystemExit(f"{key}: JetPack builders must target linux/arm64")
+        raise SystemExit(f'{key}: JetPack builders must target linux/arm64')
     if 'Dockerfile.jetpack' not in spec['dockerfile']:
         raise SystemExit(
-            f"{key}: JetPack builder must use a JetPack Dockerfile")
+            f'{key}: JetPack builder must use a JetPack Dockerfile')
     if not spec['base_image'].startswith('nvcr.io/nvidia/l4t-jetpack:'):
         raise SystemExit(
-            f"{key}: JetPack base_image must be an NVIDIA L4T image")
+            f'{key}: JetPack base_image must be an NVIDIA L4T image')
 
 
 def validate_builder_specs(matrix: dict) -> None:
@@ -260,13 +260,13 @@ def validate_cuda_builder_refs(matrix: dict) -> None:
     for prefix, node in matrix.get('cuda_targets', {}).items():
         key = node.get('builder_image', '')
         if not key:
-            raise SystemExit(f"{prefix}: builder_image is required")
+            raise SystemExit(f'{prefix}: builder_image is required')
         if key not in specs:
-            raise SystemExit(f"{prefix}: unknown builder_image {key!r}")
+            raise SystemExit(f'{prefix}: unknown builder_image {key!r}')
 
         spec = specs[key]
         if spec['kind'] != 'manylinux-cuda':
-            raise SystemExit(f"{prefix}: builder_image must be manylinux-cuda")
+            raise SystemExit(f'{prefix}: builder_image must be manylinux-cuda')
         expected_cuda_pkg = node['cuda'].replace('.', '-')
         if spec['cuda_pkg_version'] != expected_cuda_pkg:
             raise SystemExit(
@@ -277,7 +277,7 @@ def validate_cuda_builder_refs(matrix: dict) -> None:
         spec_toolset = spec.get('gcc_toolset', '')
         if spec_toolset != target_toolset:
             raise SystemExit(
-                f"{prefix}: builder image gcc_toolset {spec_toolset!r} != target {target_toolset!r}"  # noqa: E501
+                f'{prefix}: builder image gcc_toolset {spec_toolset!r} != target {target_toolset!r}'  # noqa: E501
             )
         actual_image = node.get('manylinux_image', '')
         _validate_digest_pinned_manylinux_image(prefix, spec, actual_image)
@@ -290,18 +290,18 @@ def validate_special_builder_refs(matrix: dict) -> None:
         if not key:
             continue
         if key not in specs:
-            raise SystemExit(f"{prefix}: unknown builder_image {key!r}")
+            raise SystemExit(f'{prefix}: unknown builder_image {key!r}')
         spec = specs[key]
         if node['platform'].endswith('x86_64') and node['cuda'] == 'cpu':
             if spec['kind'] != 'manylinux-cpu':
                 raise SystemExit(
-                    f"{prefix}: CPU builder_image must be manylinux-cpu")
+                    f'{prefix}: CPU builder_image must be manylinux-cpu')
             actual_image = node.get('manylinux_image', '')
             _validate_digest_pinned_manylinux_image(prefix, spec, actual_image)
             continue
         if node['platform'].endswith('aarch64') and spec['kind'] != 'jetpack':
             raise SystemExit(
-                f"{prefix}: aarch64 builder_image must be jetpack")
+                f'{prefix}: aarch64 builder_image must be jetpack')
         versions = list(node['torch'])
         if len(versions) == 1 and spec.get('pytorch', '') != versions[0]:
             raise SystemExit(
@@ -321,7 +321,7 @@ def validate(matrix: dict, include_builders: bool = True) -> None:
     for prefix, node in matrix.get('cuda_targets', {}).items():
         if not node.get('manylinux_image'):
             raise SystemExit(
-                f"cuda target {prefix!r} is missing manylinux_image")
+                f'cuda target {prefix!r} is missing manylinux_image')
     if include_builders:
         validate_builder_specs(matrix)
         validate_cuda_builder_refs(matrix)
@@ -330,29 +330,29 @@ def validate(matrix: dict, include_builders: bool = True) -> None:
         compacts = [compact_torch(torch) for torch in node['torch']]
         if len(compacts) != len(set(compacts)):
             raise SystemExit(
-                f"{prefix}: torch versions collide on a compact id")
+                f'{prefix}: torch versions collide on a compact id')
     for prefix, torch, node in iter_build_units(matrix):
         rule = compat.get(torch)
         if rule is None:
             raise SystemExit(
-                f"{prefix}: torch {torch} is absent from pytorch_compatibility"
+                f'{prefix}: torch {torch} is absent from pytorch_compatibility'
             )
         cuda = node['cuda']
         if cuda != 'cpu' and cuda not in rule['cuda_stable']:
             raise SystemExit(
-                f"{prefix}: torch {torch} + CUDA {cuda} is not an official stable combo"  # noqa: E501
+                f'{prefix}: torch {torch} + CUDA {cuda} is not an official stable combo'  # noqa: E501
             )
         for py in node['torch'][torch]['python']:
             if py not in rule['python']:
                 raise SystemExit(
-                    f"{prefix}: torch {torch} does not support Python {py}")
+                    f'{prefix}: torch {torch} does not support Python {py}')
         compact = compact_torch(torch)
-        expected_prefix = f"{prefix}-torch{compact}/onedl-mmcv/"
+        expected_prefix = f'{prefix}-torch{compact}/onedl-mmcv/'
         actual_prefix = node['publish_prefix_template'].format(
             torch_compact=compact)
         if actual_prefix != expected_prefix:
             raise SystemExit(
-                f"{prefix}: publish prefix {actual_prefix!r} != expected {expected_prefix!r}"  # noqa: E501
+                f'{prefix}: publish prefix {actual_prefix!r} != expected {expected_prefix!r}'  # noqa: E501
             )
 
 
@@ -365,16 +365,16 @@ def gen_linux_matrix(matrix: dict) -> dict:
         cuda = node['cuda']
         cibw_build = ' '.join(f"cp{py.replace('.', '')}-{platform}"
                               for py in node['torch'][torch]['python'])
-        name = (f"Linux CPU wheels (torch {torch})" if cuda == 'cpu' else
-                f"Linux CUDA {cuda} wheels (torch {torch})")
+        name = (f'Linux CPU wheels (torch {torch})' if cuda == 'cpu' else
+                f'Linux CUDA {cuda} wheels (torch {torch})')
         gcc_toolset = node.get('gcc_toolset', '')
-        cc_bin = (f"/opt/rh/gcc-toolset-{gcc_toolset}/root/usr/bin:"
+        cc_bin = (f'/opt/rh/gcc-toolset-{gcc_toolset}/root/usr/bin:'
                   if gcc_toolset else '')
-        cc_lib = (f"/opt/rh/gcc-toolset-{gcc_toolset}/root/usr/lib64:"
+        cc_lib = (f'/opt/rh/gcc-toolset-{gcc_toolset}/root/usr/lib64:'
                   if gcc_toolset else '')
         include.append({
             'id':
-            f"{prefix}-torch{compact_torch(torch)}",
+            f'{prefix}-torch{compact_torch(torch)}',
             'name':
             name,
             'runner':
@@ -405,7 +405,7 @@ def gen_builder_matrix(matrix: dict,
     specs = builder_specs(matrix)
     if image_id:
         if image_id not in specs:
-            raise SystemExit(f"unknown builder image: {image_id}")
+            raise SystemExit(f'unknown builder image: {image_id}')
         items = [(image_id, specs[image_id])]
     else:
         items = sorted(specs.items())
@@ -436,7 +436,7 @@ def gen_builder_matrix(matrix: dict,
             'image':
             spec['image'],
             'spec_tag':
-            f"spec-{_builder_spec_hash(key, spec, repo_root)}",
+            f'spec-{_builder_spec_hash(key, spec, repo_root)}',
         })
     return {'include': include}
 
@@ -465,7 +465,7 @@ def main() -> int:
     if args.command == 'validate':
         validate(matrix)
         print(
-            f"ok: {sum(1 for _ in iter_build_units(matrix))} build groups valid"  # noqa: E501
+            f'ok: {sum(1 for _ in iter_build_units(matrix))} build groups valid'  # noqa: E501
         )
     elif args.command == 'gen-matrix':
         validate(matrix)

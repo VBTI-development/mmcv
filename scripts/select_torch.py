@@ -11,7 +11,7 @@ DEFAULT_MATRIX = Path('ci/build-matrix.json')
 
 
 def current_build_identifier() -> str:
-    return f"cp{sys.version_info.major}{sys.version_info.minor}-manylinux_x86_64"  # noqa: E501
+    return f'cp{sys.version_info.major}{sys.version_info.minor}-manylinux_x86_64'  # noqa: E501
 
 
 def install_args(group: dict, build_identifier: str) -> list[str]:
@@ -26,12 +26,12 @@ def install_args(group: dict, build_identifier: str) -> list[str]:
     packages = [f"torch=={spec['torch']}"]
     torchvision = spec.get('torchvision', '')
     packages.append(
-        f"torchvision=={torchvision}" if torchvision else 'torchvision')
+        f'torchvision=={torchvision}' if torchvision else 'torchvision')
 
     args = ['uv', 'pip', 'install', '--python', sys.executable, '--system']
     backend = group.get('torch_backend', '')
     if backend:
-        args.append(f"--torch-backend={backend}")
+        args.append(f'--torch-backend={backend}')
     return [*args, *packages]
 
 

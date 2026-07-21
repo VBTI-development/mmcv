@@ -21,7 +21,7 @@ def sha256(path: Path) -> str:
 
 def safe_filename(filename: str) -> str:
     if Path(filename).name != filename:
-        raise SystemExit(f"Unsafe wheel filename in manifest: {filename!r}")
+        raise SystemExit(f'Unsafe wheel filename in manifest: {filename!r}')
     return filename
 
 
@@ -29,7 +29,7 @@ def safe_prefix(prefix: str) -> str:
     clean = prefix.strip('/')
     if not clean or not SAFE_PREFIX_RE.fullmatch(clean) or '..' in clean.split(
             '/'):
-        raise SystemExit(f"Unsafe publish prefix in manifest: {prefix!r}")
+        raise SystemExit(f'Unsafe publish prefix in manifest: {prefix!r}')
     return clean
 
 
@@ -37,11 +37,11 @@ def validate_record(source: Path, wheel: dict) -> None:
     expected_size = wheel.get('size')
     if expected_size is not None and source.stat().st_size != expected_size:
         raise SystemExit(
-            f"{source}: size mismatch; expected {expected_size}, got {source.stat().st_size}"  # noqa: E501
+            f'{source}: size mismatch; expected {expected_size}, got {source.stat().st_size}'  # noqa: E501
         )
     expected_sha = wheel.get('sha256')
     if expected_sha and sha256(source) != expected_sha:
-        raise SystemExit(f"{source}: sha256 mismatch")
+        raise SystemExit(f'{source}: sha256 mismatch')
 
 
 def publish_wheel(wheel: dict, artifact_dir: Path, bucket: str,
@@ -50,9 +50,9 @@ def publish_wheel(wheel: dict, artifact_dir: Path, bucket: str,
     prefix = safe_prefix(wheel['publish_prefix'])
     source = artifact_dir / filename
     if not source.exists():
-        raise SystemExit(f"Wheel listed in manifest does not exist: {source}")
+        raise SystemExit(f'Wheel listed in manifest does not exist: {source}')
     validate_record(source, wheel)
-    destination = f"s3://{bucket}/{prefix}/{source.name}"
+    destination = f's3://{bucket}/{prefix}/{source.name}'
     command = [
         'aws',
         's3',
@@ -63,7 +63,7 @@ def publish_wheel(wheel: dict, artifact_dir: Path, bucket: str,
         endpoint_url,
         '--only-show-errors',
     ]
-    print(f"+ aws s3 cp {source.name} s3://{bucket}/{prefix}/{source.name}")
+    print(f'+ aws s3 cp {source.name} s3://{bucket}/{prefix}/{source.name}')
     if not dry_run:
         subprocess.run(command, check=True)
 
@@ -79,7 +79,7 @@ def main() -> int:
     manifests = sorted(args.artifact_root.glob('*/manifest.json'))
     if not manifests:
         raise SystemExit(
-            f"No manifest.json files found under {args.artifact_root}")
+            f'No manifest.json files found under {args.artifact_root}')
 
     for manifest_path in manifests:
         manifest = json.loads(manifest_path.read_text())
